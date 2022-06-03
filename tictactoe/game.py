@@ -1,4 +1,4 @@
-from player import HumanPlayer, RandomComputerPlayer
+from player import HumanPlayer, RandomComputerPlayer, GeniusComputerPlayer
 import time
 
 class TicTacToe:
@@ -9,6 +9,10 @@ class TicTacToe:
     def print_board(self):
         for row in [self.board[i*3:(i+1)*3] for i in range(3)]:
             print('| ' + ' | '.join(row) + ' |')
+    
+    def empty_board(self):
+        self.board = [' ' for i in range(9)] 
+        self.current_winner = None
     
     @staticmethod
     def print_board_nums():
@@ -84,13 +88,28 @@ def play(game, x_player, o_player, print_game=True):
             letter = 'O' if letter == 'X' else 'X'
 
         if print_game:
-            time.sleep(0.8)
+            time.sleep(0.3)
+            #pass
     
     if print_game:
         print('It\'s a tie!')
 
 if __name__ == '__main__':
-    x_player = HumanPlayer('X')
-    o_player = RandomComputerPlayer('O')
+    x_wins = 0
+    o_wins = 0
+    ties = 0
+    iter = 5
+    x_player = GeniusComputerPlayer('X')
+    o_player = GeniusComputerPlayer('O')
     t = TicTacToe()
-    play(t, x_player, o_player, print_game=True)
+
+    for i in range(iter):
+        t.empty_board()
+        result = play(t, x_player, o_player, print_game=True)
+        if result == 'X':
+            x_wins += 1
+        elif result == 'O':
+            o_wins += 1
+        else:
+            ties += 1
+    print(f'After {iter} iterations: \nx wins: {x_wins}\no wins: {o_wins}\nties: {ties}')
